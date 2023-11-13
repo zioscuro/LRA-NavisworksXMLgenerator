@@ -1,0 +1,8 @@
+thead th {
+  writing-mode: vertical-lr;
+  text-align: end;
+}
+
+tbody th {
+  text-align: end;
+}
