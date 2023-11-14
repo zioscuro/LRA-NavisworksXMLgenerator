@@ -27,7 +27,7 @@ const xmlFooter = `</clashtests>
 </batchtest>
 </exchange>`;
 
-function generateClashTest(
+function generateClashTestLC1(
   nome,
   tipo,
   tolleranza,
@@ -48,11 +48,43 @@ function generateClashTest(
   return clashTestDefinition;
 }
 
+function generateClashTestLC2(numero, nome, clashgroupsLeft, clashgroupsRight) {
+  const clashTestDefinition = `<clashtest name="${numero} - ${nome}" test_type="hard" status="new" tolerance="0.1640419948" merge_composites="1">
+  <linkage mode="none"/>
+  <left>    
+    ${defineClashSelection(clashgroupsLeft)}
+  </left>
+  <right>
+    ${defineClashSelection(clashgroupsRight)}
+  </right>
+  <rules/>
+</clashtest>
+`;
+
+  return clashTestDefinition;
+}
+
+function defineClashSelection(clashGroupsArray) {
+  let clashSelection = `<clashselection selfintersect="0" primtypes="1">
+  <locator>`;
+
+  clashGroupsArray.forEach((group) => {
+    clashSelection += `lcop_selection_set_tree/${group};`;
+  });
+
+  clashSelection = clashSelection.slice(0, -1);
+
+  clashSelection += `</locator>
+  </clashselection>`;
+
+  return clashSelection;
+}
+
 function writeXML() {
   let output = xmlHeader;
 
   for (const group of clashGroups) {
-    output += generateClashTest(
+    output += generateClashTestLC1(
       `${clashGroups.indexOf(group) + 1}_LC1-STAGE1_${group}`,
       'duplicate',
       '0.1640419948',
@@ -62,7 +94,7 @@ function writeXML() {
   }
 
   for (const group of clashGroups) {
-    output += generateClashTest(
+    output += generateClashTestLC1(
       `${clashGroups.indexOf(group) + 1}_LC1-STAGE2_${group}`,
       'hard',
       '0.1640419948',
@@ -93,7 +125,7 @@ function download(filename, text) {
 }
 
 btnExportLC1.addEventListener('click', () => {
-  download('fileXML', writeXML());
+  download('fileXML-LC1', writeXML());
 });
 
 clashGroupAddBtn.addEventListener('click', (e) => {
@@ -147,21 +179,29 @@ btnGenerateClashMatrix.addEventListener('click', () => {
 
   clashMatrixLC2thead.appendChild(rowHeader);
 
-  for (const group of clashGroups) {
+  for (const groupSelectionA of clashGroups) {
     const row = document.createElement('tr');
     const header = document.createElement('th');
-    header.textContent = group;
+    header.textContent = groupSelectionA;
 
     row.appendChild(header);
 
-    clashGroups.forEach(() => {
+    for (const groupSelectionB of clashGroups) {
       const tdCell = document.createElement('td');
+      tdCell.setAttribute('data-selection-left', groupSelectionA);
+      tdCell.setAttribute('data-selection-right', groupSelectionB);
+
       const groupCheckbox = document.createElement('input');
       groupCheckbox.type = 'checkbox';
+      groupCheckbox.checked = false;
+
+      if (tdCell.dataset.selectionLeft === tdCell.dataset.selectionRight) {
+        groupCheckbox.disabled = true;
+      }
 
       tdCell.appendChild(groupCheckbox);
       row.appendChild(tdCell);
-    });
+    }
 
     clashMatrixLC2tbody.appendChild(row);
 
@@ -169,4 +209,35 @@ btnGenerateClashMatrix.addEventListener('click', () => {
 
     btnExportLC2.disabled = false;
   }
+});
+
+btnExportLC2.addEventListener('click', () => {
+  let output = xmlHeader;
+
+  const checkedRows = [...clashMatrixLC2tbody.querySelectorAll('tr:has(input:checked)')];
+
+  checkedRows.forEach((tr) => {
+    const reportNumber = checkedRows.indexOf(tr) + 1;
+    const selectionLeft = [];
+    const selectionRight = [];
+
+    const rowHeader = tr.querySelector('th').textContent;
+
+    selectionLeft.push(rowHeader);
+
+    tr.querySelectorAll('td:has(input:checked)').forEach((td) => {
+      selectionRight.push(td.dataset.selectionRight);
+    });
+
+    output += generateClashTestLC2(
+      reportNumber,
+      rowHeader,
+      selectionLeft,
+      selectionRight
+    );
+  });
+
+  output += xmlFooter;
+
+  download('fileXML-LC2', output);
 });
