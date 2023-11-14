@@ -1,19 +1,24 @@
-const btn = document.querySelector('#export-LC1');
-const listaGruppi = document.querySelector('ul');
-const formGruppi = document.querySelector('#from-gruppi-selezione');
-const inputGruppoSelezione = document.querySelector('#input-gruppo-selezione');
-const aggiungiGruppoSelezione = document.querySelector(
-  '#aggiungi-gruppo-selezione'
+const btnExportLC1 = document.getElementById('btn-export-LC1');
+const btnExportLC2 = document.getElementById('btn-export-LC2');
+const btnGenerateClashMatrix = document.getElementById(
+  'btn-generate-clashmatrix'
 );
 
-const btnGeneraLC2 = document.querySelector('#genera-LC2');
+const clashGroupList = document.getElementById('clash-group-list');
+const clashGroupForm = document.getElementById('clash-group-form');
+const clashGroupInput = document.getElementById('clash-group-input');
+const clashGroupAddBtn = document.getElementById('add-clash-group-input');
+
+const clashMatrixLC2 = document.getElementById('matrice-LC2');
+const clashMatrixLC2thead = clashMatrixLC2.querySelector('thead');
+const clashMatrixLC2tbody = clashMatrixLC2.querySelector('tbody');
 
 const clashGroups = [];
 
 const xmlHeader = `<?xml version="1.0" encoding="UTF-8" ?>
 
 <exchange xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://download.autodesk.com/us/navisworks/schemas/nw-exchange-12.0.xsd" units="ft" filename="" filepath="">
-  <batchtest name="R020_CORDINAMENTO_PFTE" internal_name="R020_CORDINAMENTO_PFTE" units="ft">
+  <batchtest name="LRA-NavisworksXMLgenerator" internal_name="LRA-NavisworksXMLgenerator" units="ft">
     <clashtests>
 `;
 
@@ -22,8 +27,14 @@ const xmlFooter = `</clashtests>
 </batchtest>
 </exchange>`;
 
-function testDefinition(nome, tipo, tolleranza, autointersecante, clashgroup) {
-  return `<clashtest name="${nome}" test_type="${tipo}" status="new" tolerance="${tolleranza}" merge_composites="1">
+function generateClashTest(
+  nome,
+  tipo,
+  tolleranza,
+  autointersecante,
+  clashgroup
+) {
+  const clashTestDefinition = `<clashtest name="${nome}" test_type="${tipo}" status="new" tolerance="${tolleranza}" merge_composites="1">
   <linkage mode="none"/>
   <left>
     <clashselection selfintersect="${autointersecante}" primtypes="1">
@@ -33,13 +44,15 @@ function testDefinition(nome, tipo, tolleranza, autointersecante, clashgroup) {
   <rules/>
 </clashtest>
 `;
+
+  return clashTestDefinition;
 }
 
 function writeXML() {
   let output = xmlHeader;
 
   for (const group of clashGroups) {
-    output += testDefinition(
+    output += generateClashTest(
       `${clashGroups.indexOf(group) + 1}_LC1-STAGE1_${group}`,
       'duplicate',
       '0.1640419948',
@@ -49,7 +62,7 @@ function writeXML() {
   }
 
   for (const group of clashGroups) {
-    output += testDefinition(
+    output += generateClashTest(
       `${clashGroups.indexOf(group) + 1}_LC1-STAGE2_${group}`,
       'hard',
       '0.1640419948',
@@ -79,82 +92,81 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-btn.addEventListener('click', () => {
+btnExportLC1.addEventListener('click', () => {
   download('fileXML', writeXML());
 });
 
-aggiungiGruppoSelezione.addEventListener('click', (e) => {
+clashGroupAddBtn.addEventListener('click', (e) => {
   e.preventDefault();
 
-  const nuovoGruppo = document.createElement('li');
+  const newClashGroup = document.createElement('li');
 
-  const descrizioneGruppo = document.createElement('span');
-  const cancBtn = document.createElement('button');
+  const newClashGroupDescription = document.createElement('span');
+  const newClashGroupCancBtn = document.createElement('button');
 
-  descrizioneGruppo.textContent = inputGruppoSelezione.value;
-  cancBtn.textContent = 'X';
+  newClashGroupDescription.textContent = clashGroupInput.value;
+  newClashGroupCancBtn.textContent = 'X';
 
-  nuovoGruppo.appendChild(descrizioneGruppo);
-  nuovoGruppo.appendChild(cancBtn);
+  newClashGroup.appendChild(newClashGroupDescription);
+  newClashGroup.appendChild(newClashGroupCancBtn);
 
-  clashGroups.push(descrizioneGruppo.textContent);
+  clashGroups.push(newClashGroupDescription.textContent);
 
-  listaGruppi.appendChild(nuovoGruppo);
+  clashGroupList.appendChild(newClashGroup);
 
-  inputGruppoSelezione.value = '';
+  clashGroupInput.value = '';
 
-  cancBtn.addEventListener('click', (e) => {
-    const gruppo = e.target.parentElement;
+  newClashGroupCancBtn.addEventListener('click', (e) => {
+    const selectedClashGroup = e.target.parentElement;
 
-    const descrizioneGruppo = gruppo.querySelector('span');
-    const removedGroupIndex = clashGroups.indexOf(
-      descrizioneGruppo.textContent
+    const selectedClashGroupDescription =
+      selectedClashGroup.querySelector('span');
+    const selectecClashGroupIndex = clashGroups.indexOf(
+      selectedClashGroupDescription.textContent
     );
 
-    listaGruppi.removeChild(gruppo);
-    clashGroups.splice(removedGroupIndex, 1);
+    clashGroupList.removeChild(selectedClashGroup);
+    clashGroups.splice(selectecClashGroupIndex, 1);
   });
 });
 
-const matriceLV2 = document.getElementById('matrice-LC2');
-const matriceLV2thead = matriceLV2.querySelector('thead');
-const matriceLV2tbody = matriceLV2.querySelector('tbody');
-
-btnGeneraLC2.addEventListener('click', () => {
-  const rigaHeader = document.createElement('tr');
+btnGenerateClashMatrix.addEventListener('click', () => {
+  const rowHeader = document.createElement('tr');
 
   const blankHeader = document.createElement('th');
   blankHeader.textContent = '';
 
-  rigaHeader.appendChild(blankHeader);
+  rowHeader.appendChild(blankHeader);
 
   for (const group of clashGroups) {
     const header = document.createElement('th');
     header.textContent = group;
 
-    rigaHeader.appendChild(header);
+    rowHeader.appendChild(header);
   }
 
-  matriceLV2thead.appendChild(rigaHeader);
+  clashMatrixLC2thead.appendChild(rowHeader);
 
   for (const group of clashGroups) {
-    const riga = document.createElement('tr');
+    const row = document.createElement('tr');
     const header = document.createElement('th');
     header.textContent = group;
 
-    riga.appendChild(header);
+    row.appendChild(header);
 
     clashGroups.forEach(() => {
-      const tdCella = document.createElement('td');
-      const checkGroup = document.createElement('input');
-      checkGroup.type = 'checkbox';
+      const tdCell = document.createElement('td');
+      const groupCheckbox = document.createElement('input');
+      groupCheckbox.type = 'checkbox';
 
-      tdCella.appendChild(checkGroup);
-      riga.appendChild(tdCella);
-    })
+      tdCell.appendChild(groupCheckbox);
+      row.appendChild(tdCell);
+    });
 
-    matriceLV2tbody.appendChild(riga);
+    clashMatrixLC2tbody.appendChild(row);
 
-    btnGeneraLC2.remove();
+    btnGenerateClashMatrix.remove();
+
+    btnExportLC2.disabled = false;
   }
 });
