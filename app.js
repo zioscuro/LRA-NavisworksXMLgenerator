@@ -1,8 +1,9 @@
 const btnExportLC1 = document.getElementById('btn-export-LC1');
 const btnExportLC2 = document.getElementById('btn-export-LC2');
 const btnGenerateClashMatrix = document.getElementById(
-  'btn-generate-clashmatrix'
-);
+  'btn-generate-clashmatrix');
+const btnRefreshClashMatrix = document.getElementById('btn-refresh-clashmatrix')
+
 
 const clashGroupList = document.getElementById('clash-group-list');
 const clashGroupForm = document.getElementById('clash-group-form');
@@ -15,29 +16,29 @@ const clashMatrixLC2tbody = clashMatrixLC2.querySelector('tbody');
 
 const clashGroups = [];
 
-const xmlHeader = `<?xml version="1.0" encoding="UTF-8" ?>
+const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
 
 <exchange xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://download.autodesk.com/us/navisworks/schemas/nw-exchange-12.0.xsd" units="ft" filename="" filepath="">
   <batchtest name="LRA-NavisworksXMLgenerator" internal_name="LRA-NavisworksXMLgenerator" units="ft">
     <clashtests>
 `;
 
-const xmlFooter = `</clashtests>
+const XML_FOOTER = `</clashtests>
 <selectionsets/>
 </batchtest>
 </exchange>`;
 
 function generateClashTestLC1(
-  nome,
-  tipo,
-  tolleranza,
-  autointersecante,
+  name,
+  type,
+  tollerance,
+  autointersect,
   clashgroup
 ) {
-  const clashTestDefinition = `<clashtest name="${nome}" test_type="${tipo}" status="new" tolerance="${tolleranza}" merge_composites="1">
+  const clashTestDefinition = `<clashtest name="${name}" test_type="${type}" status="new" tolerance="${tollerance}" merge_composites="1">
   <linkage mode="none"/>
   <left>
-    <clashselection selfintersect="${autointersecante}" primtypes="1">
+    <clashselection selfintersect="${autointersect}" primtypes="1">
       <locator>lcop_selection_set_tree/${clashgroup}</locator>
     </clashselection>
   </left>
@@ -48,8 +49,8 @@ function generateClashTestLC1(
   return clashTestDefinition;
 }
 
-function generateClashTestLC2(numero, nome, clashgroupsLeft, clashgroupsRight) {
-  const clashTestDefinition = `<clashtest name="${numero} - ${nome}" test_type="hard" status="new" tolerance="0.1640419948" merge_composites="1">
+function generateClashTestLC2(number, name, clashgroupsLeft, clashgroupsRight) {
+  const clashTestDefinition = `<clashtest name="${number}-LC2_${name}" test_type="hard" status="new" tolerance="0.1640419948" merge_composites="1">
   <linkage mode="none"/>
   <left>    
     ${defineClashSelection(clashgroupsLeft)}
@@ -80,8 +81,8 @@ function defineClashSelection(clashGroupsArray) {
   return clashSelection;
 }
 
-function writeXML() {
-  let output = xmlHeader;
+function writeXmlLC1() {
+  let output = XML_HEADER;
 
   for (const group of clashGroups) {
     output += generateClashTestLC1(
@@ -103,12 +104,43 @@ function writeXML() {
     );
   }
 
-  output += xmlFooter;
+  output += XML_FOOTER;
 
   return output;
 }
 
-function download(filename, text) {
+function writeXmlLC2() {
+  let output = XML_HEADER;
+
+  const checkedRows = [...clashMatrixLC2tbody.querySelectorAll('tr:has(input:checked)')];
+
+  checkedRows.forEach((tr) => {
+    const reportNumber = checkedRows.indexOf(tr) + 1;
+    const selectionLeft = [];
+    const selectionRight = [];
+
+    const rowHeader = tr.querySelector('th').textContent;
+
+    selectionLeft.push(rowHeader);
+
+    tr.querySelectorAll('td:has(input:checked)').forEach((td) => {
+      selectionRight.push(td.dataset.selectionRight);
+    });
+
+    output += generateClashTestLC2(
+      reportNumber,
+      rowHeader,
+      selectionLeft,
+      selectionRight
+    );
+  });
+
+  output += XML_FOOTER;
+
+  return output
+}
+
+function downloadXml(filename, text) {
   const element = document.createElement('a');
   element.setAttribute(
     'href',
@@ -124,45 +156,7 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-btnExportLC1.addEventListener('click', () => {
-  download('fileXML-LC1', writeXML());
-});
-
-clashGroupAddBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-
-  const newClashGroup = document.createElement('li');
-
-  const newClashGroupDescription = document.createElement('span');
-  const newClashGroupCancBtn = document.createElement('button');
-
-  newClashGroupDescription.textContent = clashGroupInput.value;
-  newClashGroupCancBtn.textContent = 'X';
-
-  newClashGroup.appendChild(newClashGroupDescription);
-  newClashGroup.appendChild(newClashGroupCancBtn);
-
-  clashGroups.push(newClashGroupDescription.textContent);
-
-  clashGroupList.appendChild(newClashGroup);
-
-  clashGroupInput.value = '';
-
-  newClashGroupCancBtn.addEventListener('click', (e) => {
-    const selectedClashGroup = e.target.parentElement;
-
-    const selectedClashGroupDescription =
-      selectedClashGroup.querySelector('span');
-    const selectecClashGroupIndex = clashGroups.indexOf(
-      selectedClashGroupDescription.textContent
-    );
-
-    clashGroupList.removeChild(selectedClashGroup);
-    clashGroups.splice(selectecClashGroupIndex, 1);
-  });
-});
-
-btnGenerateClashMatrix.addEventListener('click', () => {
+function buildClashMatrix() {
   const rowHeader = document.createElement('tr');
 
   const blankHeader = document.createElement('th');
@@ -204,40 +198,68 @@ btnGenerateClashMatrix.addEventListener('click', () => {
     }
 
     clashMatrixLC2tbody.appendChild(row);
-
-    btnGenerateClashMatrix.remove();
-
-    btnExportLC2.disabled = false;
   }
-});
+}
 
-btnExportLC2.addEventListener('click', () => {
-  let output = xmlHeader;
+clashGroupAddBtn.addEventListener('click', (e) => {  
+  e.preventDefault();
 
-  const checkedRows = [...clashMatrixLC2tbody.querySelectorAll('tr:has(input:checked)')];
+  const newClashGroup = document.createElement('li');
 
-  checkedRows.forEach((tr) => {
-    const reportNumber = checkedRows.indexOf(tr) + 1;
-    const selectionLeft = [];
-    const selectionRight = [];
+  const newClashGroupDescription = document.createElement('span');
+  const newClashGroupCancBtn = document.createElement('button');
 
-    const rowHeader = tr.querySelector('th').textContent;
+  newClashGroupDescription.textContent = clashGroupInput.value;
+  newClashGroupCancBtn.textContent = 'X';
 
-    selectionLeft.push(rowHeader);
+  newClashGroup.appendChild(newClashGroupDescription);
+  newClashGroup.appendChild(newClashGroupCancBtn);
 
-    tr.querySelectorAll('td:has(input:checked)').forEach((td) => {
-      selectionRight.push(td.dataset.selectionRight);
-    });
+  clashGroups.push(newClashGroupDescription.textContent);
 
-    output += generateClashTestLC2(
-      reportNumber,
-      rowHeader,
-      selectionLeft,
-      selectionRight
+  clashGroupList.appendChild(newClashGroup);
+
+  clashGroupInput.value = '';
+
+  newClashGroupCancBtn.addEventListener('click', (e) => {
+    const selectedClashGroup = e.target.parentElement;
+
+    const selectedClashGroupDescription =
+      selectedClashGroup.querySelector('span');
+    const selectecClashGroupIndex = clashGroups.indexOf(
+      selectedClashGroupDescription.textContent
     );
+
+    clashGroupList.removeChild(selectedClashGroup);
+    clashGroups.splice(selectecClashGroupIndex, 1);
   });
 
-  output += xmlFooter;
+  btnExportLC2.disabled=true;
+});
 
-  download('fileXML-LC2', output);
+btnGenerateClashMatrix.addEventListener('click', () => {
+  buildClashMatrix();  
+
+  btnGenerateClashMatrix.remove();
+
+  btnRefreshClashMatrix.disabled =false;
+  btnRefreshClashMatrix.style.display = "block"
+  btnExportLC2.disabled = false;
+});
+
+btnRefreshClashMatrix.addEventListener('click', () => {
+  clashMatrixLC2thead.innerHTML="";
+  clashMatrixLC2tbody.innerHTML="";
+
+  buildClashMatrix();
+  
+  btnExportLC2.disabled=false;
+})
+
+btnExportLC1.addEventListener('click', () => {
+  downloadXml('fileXML-LC1', writeXmlLC1());
+});
+
+btnExportLC2.addEventListener('click', () => {  
+  downloadXml('fileXML-LC2', writeXmlLC2());
 });

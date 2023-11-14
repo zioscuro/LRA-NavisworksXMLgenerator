@@ -6,3 +6,7 @@ thead th {
 tbody th {
   text-align: end;
 }
+
+#btn-refresh-clashmatrix {
+  display: none
+}
