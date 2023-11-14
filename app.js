@@ -154,5 +154,7 @@ btnGeneraLC2.addEventListener('click', () => {
     })
 
     matriceLV2tbody.appendChild(riga);
+
+    btnGeneraLC2.remove();
   }
 });
