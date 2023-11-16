@@ -1,8 +1,6 @@
-import { clashGroupInput, clashGroupList } from "./main";
-
 export const clashGroups: string[] = [];
 
-export function clashGroupManager() {
+export function clashGroupManager(clashGroupInput: HTMLInputElement, clashGroupList: HTMLUListElement) {
   const newClashGroupElement = document.createElement('li');
 
   const newClashGroupDescription: any = document.createElement('span');

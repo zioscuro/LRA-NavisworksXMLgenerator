@@ -1,37 +1,37 @@
-import { clashMatrixLC2thead, clashMatrixLC2tbody } from "./main";
-import { clashGroups } from "./clashGroups";
+export function buildClashMatrix(clashMatrix: HTMLTableElement, clashGroups: string[]) {
+  const clashMatrixThead = clashMatrix.querySelector("thead") as HTMLTableSectionElement;
+  const clashMatrixTbody = clashMatrix.querySelector("tbody") as HTMLTableSectionElement;
 
-export function buildClashMatrix() {
-  const rowHeader = document.createElement('tr');
+  const rowHeader = document.createElement("tr");
 
-  const blankHeader = document.createElement('th');
-  blankHeader.textContent = '';
+  const blankHeader = document.createElement("th");
+  blankHeader.textContent = "";
 
   rowHeader.appendChild(blankHeader);
 
   for (const group of clashGroups) {
-    const header = document.createElement('th');
+    const header = document.createElement("th");
     header.textContent = group;
 
     rowHeader.appendChild(header);
   }
 
-  clashMatrixLC2thead.appendChild(rowHeader);
+  clashMatrixThead.appendChild(rowHeader);
 
   for (const groupSelectionA of clashGroups) {
-    const row = document.createElement('tr');
-    const header = document.createElement('th');
+    const row = document.createElement("tr");
+    const header = document.createElement("th");
     header.textContent = groupSelectionA;
 
     row.appendChild(header);
 
     for (const groupSelectionB of clashGroups) {
-      const tdCell = document.createElement('td');
-      tdCell.setAttribute('data-selection-left', groupSelectionA);
-      tdCell.setAttribute('data-selection-right', groupSelectionB);
+      const tdCell = document.createElement("td");
+      tdCell.setAttribute("data-selection-left", groupSelectionA);
+      tdCell.setAttribute("data-selection-right", groupSelectionB);
 
-      const groupCheckbox = document.createElement('input');
-      groupCheckbox.type = 'checkbox';
+      const groupCheckbox = document.createElement("input");
+      groupCheckbox.type = "checkbox";
       groupCheckbox.checked = false;
 
       if (tdCell.dataset.selectionLeft === tdCell.dataset.selectionRight) {
@@ -42,6 +42,14 @@ export function buildClashMatrix() {
       row.appendChild(tdCell);
     }
 
-    clashMatrixLC2tbody.appendChild(row);
+    clashMatrixTbody.appendChild(row);
   }
+}
+
+export function resetClashMatrix(clashMatrix: HTMLTableElement) {
+  const clashMatrixThead = clashMatrix.querySelector("thead") as HTMLTableSectionElement;
+  const clashMatrixTbody = clashMatrix.querySelector("tbody") as HTMLTableSectionElement;
+
+  clashMatrixThead.innerHTML = "";
+  clashMatrixTbody.innerHTML = "";
 }

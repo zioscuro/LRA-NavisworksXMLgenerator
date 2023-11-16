@@ -42,12 +42,12 @@ export function writeXmlLC1() {
   return output;
 }
 
-export function writeXmlLC2(clashMatrix: any) {
+export function writeXmlLC2(clashMatrix: HTMLTableElement) {
   let output = XML_HEADER;
 
   const checkedRows = [...clashMatrix.querySelectorAll('tr:has(input:checked)')];
 
-  checkedRows.forEach((tr) => {
+  checkedRows.forEach((tr:any) => {
     const reportNumber = checkedRows.indexOf(tr) + 1;
     const selectionLeft: string[] = [];
     const selectionRight: string[] = [];
