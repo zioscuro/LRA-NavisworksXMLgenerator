@@ -3,7 +3,7 @@ export const clashGroups: string[] = [];
 export function clashGroupManager(clashGroupInput: HTMLInputElement, clashGroupList: HTMLUListElement) {
   const newClashGroupElement = document.createElement('li');
 
-  const newClashGroupDescription: any = document.createElement('span');
+  const newClashGroupDescription = document.createElement('span');
   const newClashGroupCancBtn = document.createElement('button');
 
   newClashGroupDescription.textContent = clashGroupInput.value;
@@ -18,11 +18,17 @@ export function clashGroupManager(clashGroupInput: HTMLInputElement, clashGroupL
 
   clashGroupInput.value = '';
 
-  newClashGroupCancBtn.addEventListener('click', (e: any) => {
-    const selectedClashGroup = e.target.parentElement;
+  newClashGroupCancBtn.addEventListener('click', (e: MouseEvent) => {
+    const selectedCancBtn = e.target as HTMLButtonElement
+    const selectedClashGroup = selectedCancBtn.parentElement;
+
+    if (!selectedClashGroup) return;
 
     const selectedClashGroupDescription =
-      selectedClashGroup.querySelector('span');
+      selectedClashGroup.querySelector('span') as HTMLSpanElement;
+
+    if (!selectedClashGroupDescription.textContent) return;
+
     const selectecClashGroupIndex = clashGroups.indexOf(
       selectedClashGroupDescription.textContent
     );

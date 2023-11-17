@@ -1,9 +1,9 @@
 export function generateClashTestLC1(
-  name: any,
-  type: any,
-  tollerance: any,
-  autointersect: any,
-  clashgroup: any
+  name: string,
+  type: string,
+  tollerance: number,
+  autointersect: boolean,
+  clashgroup: string
 ) {
   const clashTestDefinition = `<clashtest name="${name}" test_type="${type}" status="new" tolerance="${tollerance}" merge_composites="1">
   <linkage mode="none"/>
@@ -19,7 +19,12 @@ export function generateClashTestLC1(
   return clashTestDefinition;
 }
 
-export function generateClashTestLC2(number: any, name: any, clashgroupsLeft: any, clashgroupsRight: any) {
+export function generateClashTestLC2(
+  number: number,
+  name: string,
+  clashgroupsLeft: string[],
+  clashgroupsRight: string[]
+) {
   const clashTestDefinition = `<clashtest name="${number}-LC2_${name}" test_type="hard" status="new" tolerance="0.1640419948" merge_composites="1">
   <linkage mode="none"/>
   <left>    
@@ -35,11 +40,11 @@ export function generateClashTestLC2(number: any, name: any, clashgroupsLeft: an
   return clashTestDefinition;
 }
 
-function defineClashSelection(clashGroupsArray: any) {
+function defineClashSelection(clashGroupsArray: string[]) {
   let clashSelection = `<clashselection selfintersect="0" primtypes="1">
   <locator>`;
 
-  clashGroupsArray.forEach((group: any) => {
+  clashGroupsArray.forEach((group) => {
     clashSelection += `lcop_selection_set_tree/${group};`;
   });
 
