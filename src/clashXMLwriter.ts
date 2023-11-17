@@ -1,5 +1,5 @@
 import {generateClashTestLC1,generateClashTestLC2} from "./clashGenerator"
-import { clashGroups } from "./clashGroups";
+import { clashSelectionSets } from "./clashSelectionSets";
 
 
 const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -17,22 +17,22 @@ const XML_FOOTER = `</clashtests>
 export function writeXmlLC1() {
   let output = XML_HEADER;
 
-  for (const group of clashGroups) {
+  for (const group of clashSelectionSets) {
     output += generateClashTestLC1(
-      `${clashGroups.indexOf(group) + 1}_LC1-STAGE1_${group}`,
+      `${clashSelectionSets.indexOf(group) + 1}_LC1-STAGE1_${group}`,
       'duplicate',
-      '0.1640419948',
-      '1',
+      0.1640419948,
+      true,
       group
     );
   }
 
-  for (const group of clashGroups) {
+  for (const group of clashSelectionSets) {
     output += generateClashTestLC1(
-      `${clashGroups.indexOf(group) + 1}_LC1-STAGE2_${group}`,
+      `${clashSelectionSets.indexOf(group) + 1}_LC1-STAGE2_${group}`,
       'hard',
-      '0.1640419948',
-      '1',
+      0.1640419948,
+      true,
       group
     );
   }

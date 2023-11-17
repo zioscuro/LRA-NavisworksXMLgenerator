@@ -8,7 +8,7 @@ export function generateClashTestLC1(
   const clashTestDefinition = `<clashtest name="${name}" test_type="${type}" status="new" tolerance="${tollerance}" merge_composites="1">
   <linkage mode="none"/>
   <left>
-    <clashselection selfintersect="${autointersect}" primtypes="1">
+    <clashselection selfintersect="${autointersect ? 1 : 0}" primtypes="1">
       <locator>lcop_selection_set_tree/${clashgroup}</locator>
     </clashselection>
   </left>
