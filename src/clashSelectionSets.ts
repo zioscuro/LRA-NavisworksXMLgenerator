@@ -1,4 +1,4 @@
-export const clashSelectionSets: string[] = [];
+export const selectionSetsArray: string[] = [];
 
 export function clashSelectionSetManager(clashGroupInput: HTMLInputElement, clashGroupList: HTMLUListElement) {
   const newClashGroupElement = document.createElement('li');
@@ -12,7 +12,7 @@ export function clashSelectionSetManager(clashGroupInput: HTMLInputElement, clas
   newClashGroupElement.appendChild(newClashGroupDescription);
   newClashGroupElement.appendChild(newClashGroupCancBtn);
 
-  clashSelectionSets.push(newClashGroupDescription.textContent);
+  selectionSetsArray.push(newClashGroupDescription.textContent);
 
   clashGroupList.appendChild(newClashGroupElement);
 
@@ -29,11 +29,11 @@ export function clashSelectionSetManager(clashGroupInput: HTMLInputElement, clas
 
     if (!selectedClashGroupDescription.textContent) return;
 
-    const selectecClashGroupIndex = clashSelectionSets.indexOf(
+    const selectecClashGroupIndex = selectionSetsArray.indexOf(
       selectedClashGroupDescription.textContent
     );
 
     clashGroupList.removeChild(selectedClashGroup);
-    clashSelectionSets.splice(selectecClashGroupIndex, 1);
+    selectionSetsArray.splice(selectecClashGroupIndex, 1);
   });
 }

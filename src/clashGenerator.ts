@@ -22,16 +22,16 @@ export function generateClashTestLC1(
 export function generateClashTestLC2(
   number: number,
   name: string,
-  clashgroupsLeft: string[],
-  clashgroupsRight: string[]
+  selectionSetsLeft: string[],
+  selectionSetsRight: string[]
 ) {
   const clashTestDefinition = `<clashtest name="${number}-LC2_${name}" test_type="hard" status="new" tolerance="0.1640419948" merge_composites="1">
   <linkage mode="none"/>
   <left>    
-    ${defineClashSelection(clashgroupsLeft)}
+    ${defineClashSelection(selectionSetsLeft)}
   </left>
   <right>
-    ${defineClashSelection(clashgroupsRight)}
+    ${defineClashSelection(selectionSetsRight)}
   </right>
   <rules/>
 </clashtest>
@@ -40,11 +40,11 @@ export function generateClashTestLC2(
   return clashTestDefinition;
 }
 
-function defineClashSelection(clashGroupsArray: string[]) {
+function defineClashSelection(selectionSetsArray: string[]) {
   let clashSelection = `<clashselection selfintersect="0" primtypes="1">
   <locator>`;
 
-  clashGroupsArray.forEach((group) => {
+  selectionSetsArray.forEach((group) => {
     clashSelection += `lcop_selection_set_tree/${group};`;
   });
 

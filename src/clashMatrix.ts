@@ -1,4 +1,4 @@
-export function buildClashMatrix(clashMatrix: HTMLTableElement, clashGroups: string[]) {
+export function buildClashMatrix(clashMatrix: HTMLTableElement, SelectionSetsArray: string[]) {
   const clashMatrixThead = clashMatrix.querySelector("thead") as HTMLTableSectionElement;
   const clashMatrixTbody = clashMatrix.querySelector("tbody") as HTMLTableSectionElement;
 
@@ -9,7 +9,7 @@ export function buildClashMatrix(clashMatrix: HTMLTableElement, clashGroups: str
 
   rowHeader.appendChild(blankHeader);
 
-  for (const group of clashGroups) {
+  for (const group of SelectionSetsArray) {
     const header = document.createElement("th");
     header.textContent = group;
 
@@ -18,14 +18,14 @@ export function buildClashMatrix(clashMatrix: HTMLTableElement, clashGroups: str
 
   clashMatrixThead.appendChild(rowHeader);
 
-  for (const groupSelectionA of clashGroups) {
+  for (const groupSelectionA of SelectionSetsArray) {
     const row = document.createElement("tr");
     const header = document.createElement("th");
     header.textContent = groupSelectionA;
 
     row.appendChild(header);
 
-    for (const groupSelectionB of clashGroups) {
+    for (const groupSelectionB of SelectionSetsArray) {
       const tdCell = document.createElement("td");
       tdCell.setAttribute("data-selection-left", groupSelectionA);
       tdCell.setAttribute("data-selection-right", groupSelectionB);

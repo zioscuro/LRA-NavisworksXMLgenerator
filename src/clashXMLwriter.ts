@@ -1,5 +1,5 @@
 import {generateClashTestLC1,generateClashTestLC2} from "./clashGenerator"
-import { clashSelectionSets } from "./clashSelectionSets";
+import { selectionSetsArray } from "./clashSelectionSets";
 
 
 const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -17,23 +17,23 @@ const XML_FOOTER = `</clashtests>
 export function writeXmlLC1() {
   let output = XML_HEADER;
 
-  for (const group of clashSelectionSets) {
+  for (const selectionSet of selectionSetsArray) {
     output += generateClashTestLC1(
-      `${clashSelectionSets.indexOf(group) + 1}_LC1-STAGE1_${group}`,
+      `${selectionSetsArray.indexOf(selectionSet) + 1}_LC1-STAGE1_${selectionSet}`,
       'duplicate',
       0.1640419948,
       true,
-      group
+      selectionSet
     );
   }
 
-  for (const group of clashSelectionSets) {
+  for (const selectionSet of selectionSetsArray) {
     output += generateClashTestLC1(
-      `${clashSelectionSets.indexOf(group) + 1}_LC1-STAGE2_${group}`,
+      `${selectionSetsArray.indexOf(selectionSet) + 1}_LC1-STAGE2_${selectionSet}`,
       'hard',
       0.1640419948,
       true,
-      group
+      selectionSet
     );
   }
 
@@ -45,24 +45,35 @@ export function writeXmlLC1() {
 export function writeXmlLC2(clashMatrix: HTMLTableElement) {
   let output = XML_HEADER;
 
-  const checkedRows = [...clashMatrix.querySelectorAll('tr:has(input:checked)')];
+  const checkedRows = [...clashMatrix.querySelectorAll('tr:has(input:checked)')] as HTMLTableRowElement[];
 
-  checkedRows.forEach((tr:any) => {
+  checkedRows.forEach((tr) => {
     const reportNumber = checkedRows.indexOf(tr) + 1;
+
     const selectionLeft: string[] = [];
-    const selectionRight: string[] = [];
+    const selectionRight: string[] = [];    
+    
+    const rowHeader: HTMLTableCellElement | null  = tr.querySelector('th');    
+    if (!rowHeader) return;
+    
+    const selectedLeft: string | null = rowHeader.textContent    
+    if (!selectedLeft) return;
+    
+    selectionLeft.push(selectedLeft);
+    
+    const selectedRightArray = [...tr.querySelectorAll('td:has(input:checked)')] as HTMLTableCellElement[]
 
-    const rowHeader = tr.querySelector('th').textContent;
+    selectedRightArray.forEach((td) => {
+      const selectedRight: string | undefined = td.dataset.selectionRight
 
-    selectionLeft.push(rowHeader);
-
-    tr.querySelectorAll('td:has(input:checked)').forEach((td: any) => {
-      selectionRight.push(td.dataset.selectionRight);
+      if (!selectedRight) return;
+      
+      selectionRight.push(selectedRight);
     });
 
     output += generateClashTestLC2(
       reportNumber,
-      rowHeader,
+      selectedLeft,
       selectionLeft,
       selectionRight
     );

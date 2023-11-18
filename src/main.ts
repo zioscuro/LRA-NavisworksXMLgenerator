@@ -1,7 +1,7 @@
 import { downloadXml } from "./utils";
 import { writeXmlLC1, writeXmlLC2 } from "./clashXMLwriter";
 import { buildClashMatrix, resetClashMatrix } from "./clashMatrix";
-import { clashSelectionSetManager, clashSelectionSets } from "./clashSelectionSets";
+import { clashSelectionSetManager, selectionSetsArray } from "./clashSelectionSets";
 
 const btnExportLC1 = document.getElementById(
   "btn-export-LC1"
@@ -30,7 +30,7 @@ const clashMatrixLC2 = document.getElementById(
   "clashMatrix-LC2"
 ) as HTMLTableElement;
 
-clashGroupAddBtn.addEventListener("click", (e: any) => {
+clashGroupAddBtn.addEventListener("click", (e: Event) => {
   e.preventDefault();
 
   clashSelectionSetManager(clashGroupInput, clashGroupList);
@@ -39,7 +39,7 @@ clashGroupAddBtn.addEventListener("click", (e: any) => {
 });
 
 btnGenerateClashMatrix.addEventListener("click", () => {
-  buildClashMatrix(clashMatrixLC2, clashSelectionSets);
+  buildClashMatrix(clashMatrixLC2, selectionSetsArray);
 
   btnGenerateClashMatrix.remove();
 
@@ -51,7 +51,7 @@ btnGenerateClashMatrix.addEventListener("click", () => {
 btnRefreshClashMatrix.addEventListener("click", () => {
   resetClashMatrix(clashMatrixLC2);
 
-  buildClashMatrix(clashMatrixLC2, clashSelectionSets);
+  buildClashMatrix(clashMatrixLC2, selectionSetsArray);
 
   btnExportLC2.disabled = false;
 });
