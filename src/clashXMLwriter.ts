@@ -1,6 +1,5 @@
-import {generateClashTestLC1,generateClashTestLC2} from "./clashGenerator"
-import { selectionSetsArray } from "./clashSelectionSets";
-
+import { generateClashTest } from './clashGenerator';
+import { selectionSetsArray } from './clashSelectionSets';
 
 const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
 
@@ -18,22 +17,26 @@ export function writeXmlLC1() {
   let output = XML_HEADER;
 
   for (const selectionSet of selectionSetsArray) {
-    output += generateClashTestLC1(
-      `${selectionSetsArray.indexOf(selectionSet) + 1}_LC1-STAGE1_${selectionSet}`,
+    output += generateClashTest(
+      selectionSetsArray.indexOf(selectionSet),
+      `_LC1-STAGE1_${selectionSet}`,
       'duplicate',
       0.1640419948,
       true,
-      selectionSet
+      selectionSetsArray,
+      null
     );
   }
 
   for (const selectionSet of selectionSetsArray) {
-    output += generateClashTestLC1(
-      `${selectionSetsArray.indexOf(selectionSet) + 1}_LC1-STAGE2_${selectionSet}`,
+    output += generateClashTest(
+      selectionSetsArray.indexOf(selectionSet),
+      `_LC1-STAGE2_${selectionSet}`,
       'hard',
       0.1640419948,
       true,
-      selectionSet
+      selectionSetsArray,
+      null
     );
   }
 
@@ -45,35 +48,42 @@ export function writeXmlLC1() {
 export function writeXmlLC2(clashMatrix: HTMLTableElement) {
   let output = XML_HEADER;
 
-  const checkedRows = [...clashMatrix.querySelectorAll('tr:has(input:checked)')] as HTMLTableRowElement[];
+  const checkedRows = [
+    ...clashMatrix.querySelectorAll('tr:has(input:checked)'),
+  ] as HTMLTableRowElement[];
 
   checkedRows.forEach((tr) => {
     const reportNumber = checkedRows.indexOf(tr) + 1;
 
     const selectionLeft: string[] = [];
-    const selectionRight: string[] = [];    
-    
-    const rowHeader: HTMLTableCellElement | null  = tr.querySelector('th');    
+    const selectionRight: string[] = [];
+
+    const rowHeader: HTMLTableCellElement | null = tr.querySelector('th');
     if (!rowHeader) return;
-    
-    const selectedLeft: string | null = rowHeader.textContent    
+
+    const selectedLeft: string | null = rowHeader.textContent;
     if (!selectedLeft) return;
-    
+
     selectionLeft.push(selectedLeft);
-    
-    const selectedRightArray = [...tr.querySelectorAll('td:has(input:checked)')] as HTMLTableCellElement[]
+
+    const selectedRightArray = [
+      ...tr.querySelectorAll('td:has(input:checked)'),
+    ] as HTMLTableCellElement[];
 
     selectedRightArray.forEach((td) => {
-      const selectedRight: string | undefined = td.dataset.selectionRight
+      const selectedRight: string | undefined = td.dataset.selectionRight;
 
       if (!selectedRight) return;
-      
+
       selectionRight.push(selectedRight);
     });
 
-    output += generateClashTestLC2(
+    output += generateClashTest(
       reportNumber,
-      selectedLeft,
+      `_LC2-STAGE1_${selectedLeft}`,
+      'hard',
+      0.1640419948,
+      false,
       selectionLeft,
       selectionRight
     );
@@ -81,5 +91,5 @@ export function writeXmlLC2(clashMatrix: HTMLTableElement) {
 
   output += XML_FOOTER;
 
-  return output
+  return output;
 }
