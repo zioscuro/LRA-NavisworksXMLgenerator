@@ -10,3 +10,7 @@ tbody th {
 #btn-refresh-clashmatrix {
   display: none
 }
+
+.clash-section-header {
+  display: flex
+}
