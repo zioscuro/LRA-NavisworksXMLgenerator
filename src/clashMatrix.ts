@@ -1,6 +1,6 @@
 export function buildClashMatrix(clashMatrix: HTMLTableElement, SelectionSetsArray: string[]) {
-  const clashMatrixThead = clashMatrix.querySelector("thead") as HTMLTableSectionElement;
-  const clashMatrixTbody = clashMatrix.querySelector("tbody") as HTMLTableSectionElement;
+  const clashMatrixThead = clashMatrix.createTHead();
+  const clashMatrixTbody = clashMatrix.createTBody();
 
   const rowHeader = document.createElement("tr");
 

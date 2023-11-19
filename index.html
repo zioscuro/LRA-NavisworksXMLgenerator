@@ -20,6 +20,8 @@
       <input type="text" name="clash-group" id="clash-group-input">
       <input type="submit" value="Add" id="add-clash-group-input">
     </form>
+
+    <hr>
     
     <h2>Clash LC1</h2>    
   
@@ -29,10 +31,7 @@
     <div class="clashMatrix">
       <button id="btn-generate-clashmatrix">Generate ClashMatrix</button>
       
-      <table id="clashMatrix-LC2">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
+      <table id="clashMatrix-LC2"></table>
   
       <button id="btn-refresh-clashmatrix" disabled>Refresh ClashMatrix</button>
     </div>    
@@ -40,14 +39,24 @@
     <button id="btn-export-LC2" disabled>Export</button>
 
     <hr>
+    <h2>Clash Test Stage Manager (work in progress)</h2>
 
     <div id="clash-section-list">
       <section class="clash-section">
         <div class="clash-section-header">
-          <h2>Clash Test Group</h2>
+          <h3>Stage</h3>
           <button class="remove-section-btn" disabled>-</button>
           <button class="add-section-btn">+</button>
         </div>
+        <button class="stage-options-btn">stage options</button>
+        <dialog id="modal-stage">
+          <form>
+            <h5>stage options</h5>
+          </form>
+        </dialog>
+        <button class="stage-gen-clashmatrix-btn">generate clash matrix</button>
+        <button class="stage-refresh-clashmatrix-btn" disabled>refresh clash matrix</button>
+        <table class="stage-clashmatrix"></table>
       </section>
     </div>
 

@@ -1,10 +1,8 @@
 import { downloadXml } from './utils';
 import { writeXmlLC1, writeXmlLC2 } from './clashXMLwriter';
 import { buildClashMatrix, resetClashMatrix } from './clashMatrix';
-import {
-  clashSelectionSetManager,
-  selectionSetsArray,
-} from './clashSelectionSets';
+import { clashSelectionSetManager, selectionSetsArray} from './clashSelectionSets';
+import { addSection } from './clashStageManager';
 
 const btnExportLC1 = document.getElementById(
   'btn-export-LC1'
@@ -72,44 +70,13 @@ btnExportLC2.addEventListener('click', () => {
 const clashSectionList = document.querySelector(
   '#clash-section-list'
 ) as HTMLElement;
-let currentClashSection = document.querySelector('.clash-section') as HTMLElement;
+let currentClashStage = document.querySelector('.clash-section') as HTMLElement;
 
-const clashFirstSectionAddBtn = currentClashSection.querySelector('.add-section-btn') as HTMLButtonElement
+const clashFirstSectionAddBtn = currentClashStage.querySelector(
+  '.add-section-btn'
+) as HTMLButtonElement;
 
 clashFirstSectionAddBtn?.addEventListener('click', () => {
-  addSection()
-  clashFirstSectionAddBtn.disabled = true
+  addSection(clashSectionList, currentClashStage);
+  clashFirstSectionAddBtn.disabled = true;
 });
-
-function addSection() {  
-  clashSectionList.appendChild(currentClashSection.cloneNode(true));
-
-  currentClashSection = clashSectionList.querySelector(
-    '.clash-section:last-child'
-  ) as HTMLButtonElement;
-
-  const addBtn = clashSectionList.querySelector(
-    '.clash-section:last-child .add-section-btn'
-  ) as HTMLButtonElement;
-  const removeBtn = clashSectionList.querySelector(
-    '.clash-section:last-child .remove-section-btn'
-  ) as HTMLButtonElement;
-
-  if (removeBtn.disabled) { removeBtn.disabled = false}
-
-  addBtn?.addEventListener('click', addSection);
-  removeBtn.addEventListener('click', removeSection);
-}
-
-function removeSection(e: MouseEvent) {
-  const removedBtn = e.target as HTMLButtonElement;
-  const removedSection = removedBtn.parentNode?.parentNode as HTMLElement;
-
-  clashSectionList.removeChild(removedSection)
-
-  const clashTestGroupCollection = document.querySelectorAll('.clash-section')
-
-  if (clashTestGroupCollection.length === 1) {
-    clashFirstSectionAddBtn.disabled = false
-  }
-}
