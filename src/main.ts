@@ -1,5 +1,5 @@
 import { clashSelectionSetManager } from './clashSelectionSets';
-import { addSection } from './clashStageManager';
+import { ClashStage } from './ClashStage';
 
 const selectionSetsList = document.getElementById(
   'selection-sets-list'
@@ -24,16 +24,8 @@ selectionSetsForm.addEventListener('submit', (e: Event) => {
 
 // CLASH SECTIONS LIST (WORK IN PROGRESS)
 
-const clashSectionList = document.querySelector(
-  '#clash-section-list'
-) as HTMLElement;
-let currentClashStage = document.querySelector('.clash-section') as HTMLElement;
+const clashStageList = document.getElementById(
+  'clash-stage-list'
+) as HTMLUListElement;
 
-const clashFirstSectionAddBtn = currentClashStage.querySelector(
-  '.add-section-btn'
-) as HTMLButtonElement;
-
-clashFirstSectionAddBtn?.addEventListener('click', () => {
-  addSection(clashSectionList, currentClashStage);
-  clashFirstSectionAddBtn.disabled = true;
-});
+new ClashStage(clashStageList);

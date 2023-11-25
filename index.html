@@ -22,8 +22,17 @@
     <hr>
     <h2>Clash Test Stage Manager (work in progress)</h2>
 
-    <div id="clash-section-list">
-      <section class="clash-section">
+    <ul id="clash-stage-list"></ul>
+
+    <hr>
+    <button id="btn-export-xml">Export</button>
+
+  </main>
+  <script type="module" src="./src/main.ts"></script>
+
+  <template>
+    <ul id="clash-stage-list">
+      <li class="clash-stage">
         <div class="clash-section-header">
           <h3>Stage</h3>
           <button class="remove-section-btn" disabled>-</button>
@@ -38,12 +47,8 @@
         <button class="stage-gen-clashmatrix-btn">generate clash matrix</button>
         <button class="stage-refresh-clashmatrix-btn" disabled>refresh clash matrix</button>
         <table class="stage-clashmatrix"></table>
-      </section>
-    </div>
+      </li>
+    </ul>
+  </template>
 
-    <hr>
-    <button id="btn-export-xml">Export</button>
-
-  </main>
-  <script type="module" src="./src/main.ts"></script>
 </html>
