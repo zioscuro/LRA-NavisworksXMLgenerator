@@ -1,25 +1,25 @@
-import { downloadXml } from './utils';
-import { writeXmlLC1, writeXmlLC2 } from './clashXMLwriter';
-import { buildClashMatrix, resetClashMatrix } from './clashMatrix';
-import { clashSelectionSetManager, selectionSetsArray} from './clashSelectionSets';
+import { clashSelectionSetManager } from './clashSelectionSets';
 import { addSection } from './clashStageManager';
 
-const clashGroupInput = document.getElementById(
-  'clash-group-input'
-) as HTMLInputElement;
 const clashGroupList = document.getElementById(
   'clash-group-list'
 ) as HTMLUListElement;
-const clashGroupAddBtn = document.getElementById(
-  'add-clash-group-input'
-) as HTMLButtonElement;
+const clashGroupForm = document.getElementById(
+  'clash-group-form'
+) as HTMLFormElement;
 
-clashGroupAddBtn.addEventListener('click', (e: Event) => {
+clashGroupForm.addEventListener('submit', (e: Event) => {
   e.preventDefault();
 
-  if (!clashGroupInput.value) {return}
+  const data = new FormData(clashGroupForm);
+  const clashGroupName = data.get('clash-group') as string;
 
-  clashSelectionSetManager(clashGroupInput, clashGroupList);
+  if (!clashGroupName) {
+    return;
+  }
+  clashSelectionSetManager(clashGroupName, clashGroupList);
+
+  clashGroupForm.reset();
 });
 
 // CLASH SECTIONS LIST (WORK IN PROGRESS)

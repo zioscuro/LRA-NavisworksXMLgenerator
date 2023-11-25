@@ -1,22 +1,21 @@
 export const selectionSetsArray: string[] = [];
 
-export function clashSelectionSetManager(clashGroupInput: HTMLInputElement, clashGroupList: HTMLUListElement) {
+export function clashSelectionSetManager(clashGroupName: string, clashGroupList: HTMLUListElement) {
+  
+  selectionSetsArray.push(clashGroupName);  
+
   const newClashGroupElement = document.createElement('li');
 
   const newClashGroupDescription = document.createElement('span');
-  const newClashGroupCancBtn = document.createElement('button');
+  newClashGroupDescription.textContent = clashGroupName;
 
-  newClashGroupDescription.textContent = clashGroupInput.value;
+  const newClashGroupCancBtn = document.createElement('button');
   newClashGroupCancBtn.textContent = 'X';
 
   newClashGroupElement.appendChild(newClashGroupDescription);
   newClashGroupElement.appendChild(newClashGroupCancBtn);
 
-  selectionSetsArray.push(newClashGroupDescription.textContent);
-
   clashGroupList.appendChild(newClashGroupElement);
-
-  clashGroupInput.value = '';
 
   newClashGroupCancBtn.addEventListener('click', (e: MouseEvent) => {
     const selectedCancBtn = e.target as HTMLButtonElement
