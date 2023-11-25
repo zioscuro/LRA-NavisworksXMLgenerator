@@ -1,25 +1,25 @@
 import { clashSelectionSetManager } from './clashSelectionSets';
 import { addSection } from './clashStageManager';
 
-const clashGroupList = document.getElementById(
-  'clash-group-list'
+const selectionSetsList = document.getElementById(
+  'selection-sets-list'
 ) as HTMLUListElement;
-const clashGroupForm = document.getElementById(
-  'clash-group-form'
+const selectionSetsForm = document.getElementById(
+  'selection-sets-form'
 ) as HTMLFormElement;
 
-clashGroupForm.addEventListener('submit', (e: Event) => {
+selectionSetsForm.addEventListener('submit', (e: Event) => {
   e.preventDefault();
 
-  const data = new FormData(clashGroupForm);
-  const clashGroupName = data.get('clash-group') as string;
+  const data = new FormData(selectionSetsForm);
+  const selectionSetName = data.get('selection-set') as string;
 
-  if (!clashGroupName) {
+  if (!selectionSetName) {
     return;
   }
-  clashSelectionSetManager(clashGroupName, clashGroupList);
+  clashSelectionSetManager(selectionSetName, selectionSetsList);
 
-  clashGroupForm.reset();
+  selectionSetsForm.reset();
 });
 
 // CLASH SECTIONS LIST (WORK IN PROGRESS)
