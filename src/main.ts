@@ -17,6 +17,8 @@ const clashGroupAddBtn = document.getElementById(
 clashGroupAddBtn.addEventListener('click', (e: Event) => {
   e.preventDefault();
 
+  if (!clashGroupInput.value) {return}
+
   clashSelectionSetManager(clashGroupInput, clashGroupList);
 });
 
