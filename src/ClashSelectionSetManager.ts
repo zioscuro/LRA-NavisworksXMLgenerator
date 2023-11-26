@@ -45,7 +45,6 @@ export class ClashSelectionSetManager {
   removeSelectionSet(e: Event) {
     const selectedCancBtn = e.target as HTMLButtonElement;
     const selectedSet = selectedCancBtn.parentElement;
-    console.log(selectedSet);
 
     if (!selectedSet) return;
 

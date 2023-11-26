@@ -24,10 +24,10 @@
 
     <ul id="clash-stage-list"></ul>
 
-    <hr>
     <button id="btn-export-xml">Export</button>
 
   </main>
+
   <script type="module" src="./src/main.ts"></script>
 
   <template>
@@ -41,7 +41,27 @@
         <button class="stage-options-btn">stage options</button>
         <dialog id="modal-stage">
           <form>
-            <h5>stage options</h5>
+            <h4>stage options</h4>
+            <section>
+              <label>Clash Type:</label>
+              <label>duplicate
+                <input type="radio" name="type" value="duplicate">
+              </label>
+              <label>intersections
+                <input type="radio" name="type" value="hard">
+              </label>
+            </section>
+            <section>
+              <label>Tollerance</label>
+              <input type="number" name="tollerance" value="0.1640419948">
+            </section>
+            <section>
+              <label>autointersect
+                <input type="checkbox" name="autointesect">
+              </label>
+            </section>
+            <hr>
+            <input type="submit" value="update">
           </form>
         </dialog>
         <button class="stage-gen-clashmatrix-btn">generate clash matrix</button>
