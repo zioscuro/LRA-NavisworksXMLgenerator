@@ -1,95 +1,92 @@
-import { generateClashTest } from './clashGenerator';
-import { selectionSetsArray } from './ClashSelectionSetManager';
+// const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
 
-const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
+// <exchange xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://download.autodesk.com/us/navisworks/schemas/nw-exchange-12.0.xsd" units="ft" filename="" filepath="">
+//   <batchtest name="LRA-NavisworksXMLgenerator" internal_name="LRA-NavisworksXMLgenerator" units="ft">
+//     <clashtests>
+// `;
 
-<exchange xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://download.autodesk.com/us/navisworks/schemas/nw-exchange-12.0.xsd" units="ft" filename="" filepath="">
-  <batchtest name="LRA-NavisworksXMLgenerator" internal_name="LRA-NavisworksXMLgenerator" units="ft">
-    <clashtests>
-`;
+// const XML_FOOTER = `</clashtests>
+// <selectionsets/>
+// </batchtest>
+// </exchange>`;
 
-const XML_FOOTER = `</clashtests>
-<selectionsets/>
-</batchtest>
-</exchange>`;
+// export function writeXmlLC1() {
+//   let output = XML_HEADER;
 
-export function writeXmlLC1() {
-  let output = XML_HEADER;
+//   for (const selectionSet of selectionSetsArray) {
+//     output += generateClashTest(
+//       selectionSetsArray.indexOf(selectionSet),
+//       `_LC1-STAGE1_${selectionSet}`,
+//       'duplicate',
+//       0.1640419948,
+//       true,
+//       selectionSetsArray,
+//       null
+//     );
+//   }
 
-  for (const selectionSet of selectionSetsArray) {
-    output += generateClashTest(
-      selectionSetsArray.indexOf(selectionSet),
-      `_LC1-STAGE1_${selectionSet}`,
-      'duplicate',
-      0.1640419948,
-      true,
-      selectionSetsArray,
-      null
-    );
-  }
+//   for (const selectionSet of selectionSetsArray) {
+//     output += generateClashTest(
+//       selectionSetsArray.indexOf(selectionSet),
+//       `_LC1-STAGE2_${selectionSet}`,
+//       'hard',
+//       0.1640419948,
+//       true,
+//       selectionSetsArray,
+//       null
+//     );
+//   }
 
-  for (const selectionSet of selectionSetsArray) {
-    output += generateClashTest(
-      selectionSetsArray.indexOf(selectionSet),
-      `_LC1-STAGE2_${selectionSet}`,
-      'hard',
-      0.1640419948,
-      true,
-      selectionSetsArray,
-      null
-    );
-  }
+//   output += XML_FOOTER;
 
-  output += XML_FOOTER;
+//   return output;
+// }
 
-  return output;
-}
+// export function writeXmlLC2(clashMatrix: HTMLTableElement) {
+//   let output = XML_HEADER;
 
-export function writeXmlLC2(clashMatrix: HTMLTableElement) {
-  let output = XML_HEADER;
+//   const checkedRows = [
+//     ...clashMatrix.querySelectorAll('tr:has(input:checked)'),
+//   ] as HTMLTableRowElement[];
 
-  const checkedRows = [
-    ...clashMatrix.querySelectorAll('tr:has(input:checked)'),
-  ] as HTMLTableRowElement[];
+//   checkedRows.forEach((tr) => {
+//     const reportNumber = checkedRows.indexOf(tr) + 1;
 
-  checkedRows.forEach((tr) => {
-    const reportNumber = checkedRows.indexOf(tr) + 1;
+//     const selectionLeft: string[] = [];
+//     const selectionRight: string[] = [];
 
-    const selectionLeft: string[] = [];
-    const selectionRight: string[] = [];
+//     const rowHeader: HTMLTableCellElement | null = tr.querySelector('th');
+//     if (!rowHeader) return;
 
-    const rowHeader: HTMLTableCellElement | null = tr.querySelector('th');
-    if (!rowHeader) return;
+//     const selectedLeft: string | null = rowHeader.textContent;
+//     if (!selectedLeft) return;
 
-    const selectedLeft: string | null = rowHeader.textContent;
-    if (!selectedLeft) return;
+//     selectionLeft.push(selectedLeft);
 
-    selectionLeft.push(selectedLeft);
+//     const selectedRightArray = [
+//       ...tr.querySelectorAll('td:has(input:checked)'),
+//     ] as HTMLTableCellElement[];
 
-    const selectedRightArray = [
-      ...tr.querySelectorAll('td:has(input:checked)'),
-    ] as HTMLTableCellElement[];
+//     selectedRightArray.forEach((td) => {
+//       const selectedRight: string | undefined = td.dataset.selectionRight;
 
-    selectedRightArray.forEach((td) => {
-      const selectedRight: string | undefined = td.dataset.selectionRight;
+//       if (!selectedRight) return;
 
-      if (!selectedRight) return;
+//       selectionRight.push(selectedRight);
+//     });
 
-      selectionRight.push(selectedRight);
-    });
+//     output += generateClashTest(
+//       reportNumber,
+//       `_LC2-STAGE1_${selectedLeft}`,
+//       'hard',
+//       0.1640419948,
+//       false,
+//       selectionLeft,
+//       selectionRight
+//     );
+//   });
 
-    output += generateClashTest(
-      reportNumber,
-      `_LC2-STAGE1_${selectedLeft}`,
-      'hard',
-      0.1640419948,
-      false,
-      selectionLeft,
-      selectionRight
-    );
-  });
+//   output += XML_FOOTER;
 
-  output += XML_FOOTER;
-
-  return output;
-}
+//   return output;
+// }
