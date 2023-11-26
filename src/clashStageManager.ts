@@ -7,21 +7,33 @@ export class ClashStageManager {
   constructor(stageContainer: HTMLUListElement){
     this.stageContainer = stageContainer;
 
-    const firstStage = new ClashStage()
+    const firstStage = new ClashStage(this)
     this.stageList.push(firstStage)
 
     this.renderUI()
   }
 
   renderUI() {
-    this.stageList.forEach((stage) => {
+    this.stageContainer.innerHTML = '';
+    for (const stage of this.stageList) {
       this.stageContainer.appendChild(stage.stageElement)
-    })
+    }
   }
 
-  addStage() {}
+  addStage() {
+    const newStage = new ClashStage(this)
+    this.stageList.push(newStage)
+    this.renderUI()
+    console.log('add stage')
+  }
 
-  removeStage() {}
+  removeStage(removedStage: ClashStage) {
+    if (this.stageList.length === 1) { return }
+    const removedStageIndex = this.stageList.indexOf(removedStage);
+    this.stageList.splice(removedStageIndex, 1);
+    this.renderUI()
+    console.log('remove stage')
+  }
 
   exportXML() {}
 }

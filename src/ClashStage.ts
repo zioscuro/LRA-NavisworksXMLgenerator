@@ -1,33 +1,30 @@
+import { ClashStageManager } from "./ClashStageManager";
+
 export class ClashStage {
   stageElement: HTMLElement;
+  stageManager: ClashStageManager
 
-  constructor() {
-    this.stageElement = this.stageSetup();
+  constructor(manager: ClashStageManager) {
+    this.stageManager = manager
+    this.stageElement = document.createElement('li');
+    this.stageElement.innerHTML = `
+    <li class="clash-stage">
+      <div class="clash-stage-header">
+        <h3>Stage</h3>
+        <button class="remove-stage-btn">-</button>
+        <button class="add-stage-btn">+</button>
+      </div>
+    </li>    
+    `;    
     this.setupListeners();
   }
 
-  stageSetup() {
-    const newStage = document.createElement('li');
-
-    newStage.innerHTML = `
-      <li class="clash-stage">
-        <div class="clash-stage-header">
-          <h3>Stage</h3>
-          <button class="remove-stage-btn">-</button>
-          <button class="add-stage-btn">+</button>
-        </div>
-      </li>    
-    `;
-
-    return newStage;
-  }
-
   addStage() {
-    console.log('add stage')
+    this.stageManager.addStage()
   }
 
   removeStage() {
-    console.log('remove stage')
+    this.stageManager.removeStage(this)
   }
 
   setupListeners() {
@@ -35,8 +32,8 @@ export class ClashStage {
     const removeBtn = this.stageElement.querySelector('.remove-stage-btn')
 
     if (addBtn instanceof HTMLButtonElement && removeBtn instanceof HTMLButtonElement) {
-      addBtn.addEventListener('click', this.addStage)
-      removeBtn.addEventListener('click', this.removeStage)
+      addBtn.addEventListener('click', this.addStage.bind(this))
+      removeBtn.addEventListener('click', this.removeStage.bind(this))
     }
   }
 }
