@@ -1,65 +1,29 @@
-import { buildClashMatrix } from "./clashMatrix";
-import { selectionSetsArray } from "./clashSelectionSets";
+import { ClashStage } from "./ClashStage";
 
-export function addSection(stageList: HTMLElement, currentStage: HTMLElement) {
-  stageList.appendChild(currentStage.cloneNode(true));
+export class ClashStageManager {
+  stageContainer: HTMLUListElement;
+  stageList: ClashStage[] = [];
 
-  currentStage = stageList.querySelector(
-    '.clash-section:last-child'
-  ) as HTMLButtonElement;
+  constructor(stageContainer: HTMLUListElement){
+    this.stageContainer = stageContainer;
 
-  const addBtn = stageList.querySelector(
-    '.clash-section:last-child .add-section-btn'
-  ) as HTMLButtonElement;
-  const removeBtn = stageList.querySelector(
-    '.clash-section:last-child .remove-section-btn'
-  ) as HTMLButtonElement;
+    const firstStage = new ClashStage()
+    this.stageList.push(firstStage)
 
-  if (removeBtn.disabled) {
-    removeBtn.disabled = false;
+    this.renderUI()
   }
 
-  addBtn?.addEventListener('click', () => {
-    addSection(stageList, currentStage);
-  });
-  removeBtn.addEventListener('click', removeSection);
-}
-
-function removeSection(e: MouseEvent) {
-  const removedBtn = e.target as HTMLButtonElement;
-  const removedSection = removedBtn.parentNode?.parentNode as HTMLElement;
-  const currentSectionList = removedSection.parentNode as HTMLElement;
-
-  currentSectionList.removeChild(removedSection);
-
-  const clashTestSectionsArray = [
-    ...document.querySelectorAll('.clash-section'),
-  ];
-
-  if (clashTestSectionsArray.length === 1) {
-    const clashFirstSectionAddBtn = clashTestSectionsArray[0].querySelector(
-      '.add-section-btn'
-    ) as HTMLButtonElement;
-    clashFirstSectionAddBtn.disabled = false;
+  renderUI() {
+    this.stageList.forEach((stage) => {
+      this.stageContainer.appendChild(stage.stageElement)
+    })
   }
+
+  addStage() {}
+
+  removeStage() {}
+
+  exportXML() {}
 }
 
-const optionsBtn = document.querySelector('.stage-options-btn') as HTMLButtonElement
 
-optionsBtn.addEventListener('click', () => {
-  const optionsModal = document.getElementById('modal-stage') as HTMLDialogElement
-  
-  optionsModal.showModal()
-
-  optionsModal.addEventListener('click', () => {optionsModal.close()})
-})
-
-const stageClashMatrix = document.querySelector('.stage-clashmatrix') as HTMLTableElement
-const generateClashMatrixBtn = document.querySelector('.stage-gen-clashmatrix-btn') as HTMLButtonElement
-const refreshClashMatrixBtn = document.querySelector('.stage-refresh-clashmatrix-btn') as HTMLButtonElement
-
-generateClashMatrixBtn.addEventListener('click', () => {
-  buildClashMatrix(stageClashMatrix, selectionSetsArray)
-  generateClashMatrixBtn.disabled = true;
-  refreshClashMatrixBtn.disabled = false;
-})

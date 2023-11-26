@@ -1,11 +1,8 @@
 export class ClashStage {
-  stageList: HTMLUListElement;
   stageElement: HTMLElement;
 
-  constructor(stageList: HTMLUListElement) {
-    this.stageList = stageList;
+  constructor() {
     this.stageElement = this.stageSetup();
-    this.renderUI();
     this.setupListeners();
   }
 
@@ -33,10 +30,6 @@ export class ClashStage {
     console.log('remove stage')
   }
 
-  renderUI() {
-    this.stageList.appendChild(this.stageElement)
-  }
-
   setupListeners() {
     const addBtn = this.stageElement.querySelector('.add-stage-btn')
     const removeBtn = this.stageElement.querySelector('.remove-stage-btn')
@@ -45,7 +38,5 @@ export class ClashStage {
       addBtn.addEventListener('click', this.addStage)
       removeBtn.addEventListener('click', this.removeStage)
     }
-
-
   }
 }
