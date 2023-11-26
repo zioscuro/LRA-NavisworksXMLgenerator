@@ -1,42 +1,40 @@
-import { ClashStage } from "./ClashStage";
+import { ClashStage } from './ClashStage';
 
 export class ClashStageManager {
   stageContainer: HTMLUListElement;
   stageList: ClashStage[] = [];
 
-  constructor(stageContainer: HTMLUListElement){
+  constructor(stageContainer: HTMLUListElement) {
     this.stageContainer = stageContainer;
 
-    const firstStage = new ClashStage(this)
-    this.stageList.push(firstStage)
+    const firstStage = new ClashStage(this);
+    this.stageList.push(firstStage);
 
-    this.renderUI()
+    this.renderUI();
   }
 
   renderUI() {
     this.stageContainer.innerHTML = '';
     for (const stage of this.stageList) {
-      this.stageContainer.appendChild(stage.stageElement)
+      this.stageContainer.appendChild(stage.stageElement);
     }
   }
 
   addStage() {
-    const newStage = new ClashStage(this)
-    this.stageList.push(newStage)
-    this.renderUI()
-    console.log('add stage')
+    const newStage = new ClashStage(this);
+    this.stageList.push(newStage);
+    this.renderUI();
   }
 
   removeStage(removedStage: ClashStage) {
-    if (this.stageList.length === 1) { return }
+    if (this.stageList.length === 1) {
+      return;
+    }
 
     const removedStageIndex = this.stageList.indexOf(removedStage);
     this.stageList.splice(removedStageIndex, 1);
-    this.renderUI()
-    console.log('remove stage')
+    this.renderUI();
   }
 
   exportXML() {}
 }
-
-

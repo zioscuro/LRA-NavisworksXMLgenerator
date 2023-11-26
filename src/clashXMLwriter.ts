@@ -1,5 +1,5 @@
 import { generateClashTest } from './clashGenerator';
-import { selectionSetsArray } from './clashSelectionSets';
+import { selectionSetsArray } from './ClashSelectionSetManager';
 
 const XML_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
 

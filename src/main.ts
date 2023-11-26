@@ -1,4 +1,4 @@
-import { clashSelectionSetManager } from './clashSelectionSets';
+import { ClashSelectionSetManager } from './ClashSelectionSetManager';
 import { ClashStageManager } from './ClashStageManager';
 
 const selectionSetsList = document.getElementById(
@@ -8,23 +8,9 @@ const selectionSetsForm = document.getElementById(
   'selection-sets-form'
 ) as HTMLFormElement;
 
-selectionSetsForm.addEventListener('submit', (e: Event) => {
-  e.preventDefault();
-  const data = new FormData(selectionSetsForm);
-  const selectionSetName = data.get('selection-set') as string;
-
-  if (!selectionSetName) {
-    return;
-  }
-  clashSelectionSetManager(selectionSetName, selectionSetsList);
-
-  selectionSetsForm.reset();
-});
-
-// CLASH SECTIONS LIST (WORK IN PROGRESS)
-
 const clashStageList = document.getElementById(
   'clash-stage-list'
 ) as HTMLUListElement;
 
+new ClashSelectionSetManager(selectionSetsForm, selectionSetsList);
 new ClashStageManager(clashStageList);
