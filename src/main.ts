@@ -10,7 +10,6 @@ const selectionSetsForm = document.getElementById(
 
 selectionSetsForm.addEventListener('submit', (e: Event) => {
   e.preventDefault();
-
   const data = new FormData(selectionSetsForm);
   const selectionSetName = data.get('selection-set') as string;
 

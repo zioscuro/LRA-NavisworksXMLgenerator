@@ -1,7 +1,4 @@
-enum TestSelectionSide {
-  left,
-  right,
-}
+type testSelectionSide = 'left' | 'right'
 
 export function generateClashTest(
   number: number,
@@ -14,14 +11,14 @@ export function generateClashTest(
 ) {
   const clashTestDefinition = `<clashtest name="${number}-${name}" test_type="${type}" status="new" tolerance="${tollerance}" merge_composites="1">
   <linkage mode="none"/>${defineSideSelection(
-    TestSelectionSide[TestSelectionSide.left],
+    'left',
     selectionSetsLeft,
     autointersect
   )}
   ${
     selectionSetsRight
       ? defineSideSelection(
-          TestSelectionSide[TestSelectionSide.right],
+          'right',
           selectionSetsRight,
           autointersect
         )
@@ -35,7 +32,7 @@ export function generateClashTest(
 }
 
 function defineSideSelection(
-  side: string,
+  side: testSelectionSide,
   selectionSetsArray: string[],
   autointersect: boolean
 ) {

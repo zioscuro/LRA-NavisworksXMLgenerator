@@ -29,6 +29,7 @@ export class ClashStageManager {
 
   removeStage(removedStage: ClashStage) {
     if (this.stageList.length === 1) { return }
+
     const removedStageIndex = this.stageList.indexOf(removedStage);
     this.stageList.splice(removedStageIndex, 1);
     this.renderUI()
