@@ -42,28 +42,9 @@ export class ClashStage {
     ) {
       addBtn.addEventListener('click', this.addStage.bind(this));      
       removeBtn.addEventListener('click', this.removeStage.bind(this));
-      
-      optionsBtn.addEventListener('click', () => {
-        optionsModal.showModal();
-      });
-
-      optionsForm.addEventListener('submit', (e) => {        
-        e.preventDefault()
-        const data = new FormData(optionsForm);
-        const updatedOptions: ClashTestOptions = {
-          clashType: data.get('clash-type') as 'hard' | 'duplicate',
-          tollerance: parseFloat(data.get('tollerance') as string) as number ,
-          autointesect: Boolean(data.get('autointesect') as string)
-        }
-        this.options= updatedOptions
-        optionsForm.reset();
-        optionsModal.close()
-      })
-      
-      optionsFormCancBtn.addEventListener('click', (e) => {
-        e.preventDefault()
-        optionsModal.close()
-      })
+      optionsBtn.addEventListener('click', this.showOptions.bind(this));
+      optionsForm.addEventListener('submit',this.updateOptions.bind(this));      
+      optionsFormCancBtn.addEventListener('click', this.hideOptions.bind(this));
     }
   }
 
@@ -75,7 +56,39 @@ export class ClashStage {
     this.stageManager.removeStage(this);
   }
 
-  updateOptions() {}
+  showOptions() {
+    const optionsModal = this.stageElement.querySelector('.stage-modal');
+    if (optionsModal instanceof HTMLDialogElement) {
+      optionsModal.showModal();
+    }
+  }
+
+  hideOptions(e: Event) {
+    e.preventDefault()
+    const optionsModal = this.stageElement.querySelector('.stage-modal');
+    if (optionsModal instanceof HTMLDialogElement) {
+      optionsModal.close();
+    }    
+  }
+
+  updateOptions(e: Event) {
+    e.preventDefault()
+    const optionsModal = this.stageElement.querySelector('.stage-modal');
+    const optionsForm = this.stageElement.querySelector('.stage-modal form');
+
+    if (optionsModal instanceof HTMLDialogElement && optionsForm instanceof HTMLFormElement) {
+      const data = new FormData(optionsForm);
+      const updatedOptions: ClashTestOptions = {
+        clashType: data.get('clash-type') as 'hard' | 'duplicate',
+        tollerance: parseFloat(data.get('tollerance') as string) as number ,
+        autointesect: Boolean(data.get('autointesect') as string)
+      }
+      this.options= updatedOptions
+
+      optionsForm.reset();
+      optionsModal.close()
+    }
+  }
 
   renderUI() {
     return `
