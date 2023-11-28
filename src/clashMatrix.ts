@@ -53,3 +53,17 @@
 //   clashMatrixThead.innerHTML = "";
 //   clashMatrixTbody.innerHTML = "";
 // }
+
+export class ClashMatrix {
+  buildDuplicateMatrix() {
+    const matrix = document.createElement('p');
+    matrix.textContent = 'matrice duplicati';
+    return matrix;
+  }
+
+  buildIntersectionsMatrix() {
+    const matrix = document.createElement('p');
+    matrix.textContent = 'matrice intersezioni';
+    return matrix;
+  }
+}
