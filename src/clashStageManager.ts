@@ -10,7 +10,16 @@ export class ClashStageManager {
     const firstStage = new ClashStage(this);
     this.stageList.push(firstStage);
 
+    this.setupListeners();
     this.renderUI();
+  }
+
+  setupListeners() {
+    const exportBtn = document.getElementById('btn-export-xml')
+
+    if (exportBtn instanceof HTMLButtonElement) {
+      exportBtn.addEventListener('click', this.exportXML.bind(this))
+    }
   }
 
   renderUI() {
@@ -36,5 +45,7 @@ export class ClashStageManager {
     this.renderUI();
   }
 
-  exportXML() {}
+  exportXML() {
+    console.log('export XML')
+  }
 }

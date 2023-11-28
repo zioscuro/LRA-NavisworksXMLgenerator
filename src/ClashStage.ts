@@ -1,4 +1,4 @@
-import { ClashStageManager } from './ClashStageManager';
+import { ClashStageManager } from "./ClashStageManager";
 
 type ClashTestOptions = {
   clashType: 'hard' | 'duplicate';
