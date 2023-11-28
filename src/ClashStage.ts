@@ -84,6 +84,8 @@ export class ClashStage {
         autointesect: Boolean(data.get('autointesect') as string)
       }
       this.options= updatedOptions
+      this.stageElement.innerHTML = this.renderUI();
+      this.setupListeners();
 
       optionsForm.reset();
       optionsModal.close()
@@ -98,7 +100,11 @@ export class ClashStage {
         <button class="remove-stage-btn">-</button>
         <button class="add-stage-btn">+</button>
       </div>
-      <div>
+      <div class="clash-stage-body">
+        <h4>Current settings</h4>
+        <p>clash type: ${this.options.clashType}</p>
+        <p>tollerance: ${this.options.tollerance}</p>
+        <p>autointersect: ${this.options.autointesect}</p>
         <button class="options-stage-btn">options</button>
       </div>
       <dialog class="stage-modal">
