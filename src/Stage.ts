@@ -1,5 +1,5 @@
-import { ClashStageManager } from './ClashStageManager';
-import { ClashMatrix } from './ClashMatrix';
+import { StageManager } from './StageManager';
+import { Matrix } from './Matrix';
 
 type ClashTestOptions = {
   clashType: 'hard' | 'duplicate';
@@ -13,15 +13,15 @@ const defaultOptions: ClashTestOptions = {
   autointesect: true,
 };
 
-export class ClashStage {
+export class Stage {
   stageElement: HTMLElement;
-  stageManager: ClashStageManager;
-  stageMatrix: ClashMatrix;
+  stageManager: StageManager;
+  stageMatrix: Matrix;
   options: ClashTestOptions = defaultOptions;
 
-  constructor(manager: ClashStageManager) {
+  constructor(manager: StageManager) {
     this.stageManager = manager;
-    this.stageMatrix = new ClashMatrix(this);
+    this.stageMatrix = new Matrix(this);
     this.stageElement = document.createElement('li');
     this.stageElement.innerHTML = this.renderUI();
     this.setupListeners();

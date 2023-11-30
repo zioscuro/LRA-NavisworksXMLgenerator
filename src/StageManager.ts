@@ -1,15 +1,15 @@
-import { ClashStage } from './ClashStage';
+import { Stage } from './Stage';
 
-export class ClashStageManager {
+export class StageManager {
   stageContainer: HTMLUListElement;
-  stageList: ClashStage[] = [];
+  stageList: Stage[] = [];
   selectionSets: string[]
 
   constructor(stageContainer: HTMLUListElement, selectionSet: string[]) {
     this.selectionSets= selectionSet;    
     this.stageContainer = stageContainer;
 
-    const firstStage = new ClashStage(this);
+    const firstStage = new Stage(this);
     this.stageList.push(firstStage);
 
     this.setupListeners();
@@ -32,12 +32,12 @@ export class ClashStageManager {
   }
 
   addStage() {
-    const newStage = new ClashStage(this);
+    const newStage = new Stage(this);
     this.stageList.push(newStage);
     this.renderUI();
   }
 
-  removeStage(removedStage: ClashStage) {
+  removeStage(removedStage: Stage) {
     if (this.stageList.length === 1) {
       return;
     }

@@ -1,4 +1,4 @@
-export class ClashSelectionSetManager {
+export class SelectionSetManager {
   selectionSetsForm: HTMLFormElement;
   selectionSetsList: HTMLUListElement;
   selectionSets: string[] = [];

@@ -1,5 +1,5 @@
-import { ClashSelectionSetManager } from './ClashSelectionSetManager';
-import { ClashStageManager } from './ClashStageManager';
+import { SelectionSetManager } from './SelectionSetManager';
+import { StageManager } from './StageManager';
 
 const selectionSetsList = document.getElementById(
   'selection-sets-list'
@@ -12,5 +12,5 @@ const clashStageList = document.getElementById(
   'clash-stage-list'
 ) as HTMLUListElement;
 
-const selectionSetManager = new ClashSelectionSetManager(selectionSetsForm, selectionSetsList);
-new ClashStageManager(clashStageList, selectionSetManager.selectionSets);
+const selectionSetManager = new SelectionSetManager(selectionSetsForm, selectionSetsList);
+new StageManager(clashStageList, selectionSetManager.selectionSets);

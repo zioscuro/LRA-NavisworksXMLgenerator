@@ -1,10 +1,10 @@
-import { ClashStage } from './ClashStage';
+import { Stage } from './Stage';
 
-export class ClashMatrix {
-  parentStage: ClashStage;
+export class Matrix {
+  parentStage: Stage;
   matrixElement: HTMLTableElement;
 
-  constructor(parent: ClashStage) {
+  constructor(parent: Stage) {
     this.parentStage = parent;
     this.matrixElement = document.createElement('table');
   }
