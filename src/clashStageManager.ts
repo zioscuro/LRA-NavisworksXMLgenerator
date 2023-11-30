@@ -3,8 +3,10 @@ import { ClashStage } from './ClashStage';
 export class ClashStageManager {
   stageContainer: HTMLUListElement;
   stageList: ClashStage[] = [];
+  selectionSets: string[]
 
-  constructor(stageContainer: HTMLUListElement) {
+  constructor(stageContainer: HTMLUListElement, selectionSet: string[]) {
+    this.selectionSets= selectionSet;    
     this.stageContainer = stageContainer;
 
     const firstStage = new ClashStage(this);

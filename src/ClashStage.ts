@@ -1,5 +1,5 @@
 import { ClashStageManager } from './ClashStageManager';
-import { ClashMatrix } from './clashMatrix';
+import { ClashMatrix } from './ClashMatrix';
 
 type ClashTestOptions = {
   clashType: 'hard' | 'duplicate';
@@ -21,7 +21,7 @@ export class ClashStage {
 
   constructor(manager: ClashStageManager) {
     this.stageManager = manager;
-    this.stageMatrix = new ClashMatrix();
+    this.stageMatrix = new ClashMatrix(this);
     this.stageElement = document.createElement('li');
     this.stageElement.innerHTML = this.renderUI();
     this.setupListeners();
@@ -171,12 +171,14 @@ export class ClashStage {
         genMatrixBtn instanceof HTMLButtonElement &&
         refreshMatrixBtn instanceof HTMLButtonElement
       )
-    ) { return; }
+    ) {
+      return;
+    }
 
     if (this.options.clashType === 'duplicate') {
-      stageBody.appendChild(this.stageMatrix.buildDuplicateMatrix());
+      this.stageMatrix.renderDuplicateMatrix();
     } else {
-      stageBody.appendChild(this.stageMatrix.buildIntersectionsMatrix());
+      this.stageMatrix.renderIntersectionsMatrix();
     }
 
     if (e.target instanceof HTMLButtonElement && e.target === genMatrixBtn) {

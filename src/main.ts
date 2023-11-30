@@ -12,5 +12,5 @@ const clashStageList = document.getElementById(
   'clash-stage-list'
 ) as HTMLUListElement;
 
-new ClashSelectionSetManager(selectionSetsForm, selectionSetsList);
-new ClashStageManager(clashStageList);
+const selectionSetManager = new ClashSelectionSetManager(selectionSetsForm, selectionSetsList);
+new ClashStageManager(clashStageList, selectionSetManager.selectionSets);
